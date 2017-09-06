@@ -1,0 +1,94 @@
+# // vim: set ft=toml:
+
+# Hostname and port of Bosun; may include basic auth and https config similar to scollector
+Host = "{{ _rs_collector.server.protocol|default("https") }}://{% if _rs_collector.auth is defined %}{{ _rs_collector.auth.user }}:{{ _rs_collector.auth.password }}@{% endif %}{{ _rs_collector.server.ip }}:{{ _rs_collector.server.port }}"
+FullHost = false
+Hostname = "{{ ansible_hostname ~ "." ~ _rs_collector.domain }}"
+
+# Bosun tags
+[Tags]
+{% if _rs_collector.common is defined and _rs_collector.common.tags is defined %}
+{% for k,v in _rs_collector.common.tags.iteritems() %}
+  {{ k }} = "{{ v }}"
+{% endfor %}
+{% endif %}
+
+{% if _rs_collector.galera is defined %}
+{% for g in _rs_collector.galera %}
+# Currently, only one Galera Collector is supported
+[Galera]
+{% if g.user is defined %}
+  User = "{{ g.user }}"
+{% endif %}
+{% if g.password is defined %}
+  Password = "{{ g.password }}"
+{% endif %}
+{% if g.host is defined %}
+  Host = "{{ g.host }}"
+{% endif %}
+{% if g.socket is defined %}
+  Socket = "{{ g.socket }}"
+{% endif %}
+{% if g.use_ssl is defined and g.use_ssl %}
+  # Activates SSL transport encryption and requires a least a CA certificate; currently only supported on Linux
+  UseSsl = true
+  CaCert = "{{ g.ca_cert }}"
+  # If a client cert is set, a client cert key file is required
+{% endif %}
+{% if g.client_cert is defined and g.client_cert_key is defined %}
+  ClientCert = "{{ g.client_cert }}"
+  ClientCertKey = "{{ g.client_cert_key }}"
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if _rs_collector.hasipaddr is defined %}
+# HasIpAddr configuration with list of IP addresses to monitor
+[HasIpAddr]
+{% if _rs_collector.hasipaddr.ipv4 is defined %}
+  Ipv4 = [ "{{ _rs_collector.hasipaddr.ipv4 | join('", "') }}" ]
+{% endif %}
+{% endif %}
+
+{% if _rs_collector.mongo is defined %}
+# Mongo configuration -- multiple instances are allowed
+{% for m in _rs_collector.mongo %}
+[[Mongo]]
+  Name = "{{ m.name }}"
+{% if m.user is defined %}
+  User = "{{ m.user }}"
+{% endif %}
+{% if m.password is defined %}
+  Password = "{{ m.password }}"
+{% endif %}
+  Host = "{{ m.host }}"
+  Port = {{ m.port }}
+{% if m.use_ssl is defined and m.use_ssl %}
+   # Activates SSL transport encryption and requires a least a CA certificate; currently only supported on Linux
+  UseSsl = true
+  CaCert = "{{ m.ca_cert }}"
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if _rs_collector.jvm is defined %}
+# JVM GC Stats configuration -- multiple instances are allowed
+{% for j in _rs_collector.jvm %}
+[[Jvm]]
+  # Regex to parse class name and cmd line values as returned from jps -lv in order to identify a JVM
+  Command = "{{ j.command }}"
+  # Name to assign to an identified JVM
+  Name = "{{ j.name }}"
+
+{% endfor %}
+{% endif %}
+
+{% if _rs_collector.postfix is defined %}
+# Postfix configuration -- only activation without any parameters
+[Postfix]
+{% endif %}
+
+{% if _rs_collector.extra_lines is defined %}
+{{ _rs_collector.extra_lines }}
+{% endif %}
+

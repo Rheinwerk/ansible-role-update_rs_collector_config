@@ -7,6 +7,7 @@ Hostname = "{{ ansible_hostname ~ "." ~ _rs_collector.domain }}"
 
 # Bosun tags
 [Tags]
+  hostgroup = "{{ _rs_collector.hostgroup }}"
 {% if _rs_collector.common is defined and _rs_collector.common.tags is defined %}
 {% for k,v in _rs_collector.common.tags.iteritems() %}
   {{ k }} = "{{ v }}"

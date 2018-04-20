@@ -1,6 +1,7 @@
 # vim: ts=2 sw=2 et ft=ansible
 _rs_collector:
   use_default_config: yes
+  config_file: /etc/rs-collector.conf
   server:
     ip: localhost
     port: 8070

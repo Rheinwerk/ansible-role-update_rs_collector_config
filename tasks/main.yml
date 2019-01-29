@@ -1,4 +1,4 @@
 # vim: ft=ansible:et:ts=2
 
-- ame: Update rs_collector configuration
+- name: Update rs_collector configuration
   template: src="etc/rs-collector.conf.j2" dest="{{ _rs_collector.config_file|default("/etc/rs-collector.conf") }}" mode="0640" owner=root group=root

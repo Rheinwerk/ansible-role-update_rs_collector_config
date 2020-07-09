@@ -7,8 +7,8 @@
   stat:
     path: /etc/init/rs-collector.override
   register: stat_rs_collector_override
-  when: _rs_collector.oom_score is defined
+  when: _rs_collector.oom_score_adj is defined
 
 - name: Set oom score for rs-collector
-  lineinfile: dest="{{ stat_rs_collector_override.stat.path }}" state=present regexp='^oom score' line="oom score {{ _rs_collector.oom_score }}"
-  when: _rs_collector.oom_score is defined and stat_rs_collector_override.stat.exists
+  lineinfile: dest="{{ stat_rs_collector_override.stat.path }}" state=present regexp='^oom score' line="oom score {{ _rs_collector.oom_score_adj }}"
+  when: _rs_collector.oom_score_adj is defined and stat_rs_collector_override.stat.exists

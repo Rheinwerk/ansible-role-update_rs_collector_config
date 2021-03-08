@@ -32,5 +32,11 @@
         regexp: '^OOMScoreAdjust='
         line: "OOMScoreAdjust={{ _rs_collector.oom_score_adj }}"
         insertafter: '^\[Service\]'
+      register: systemd_reload
       when: stat_rs_collector_systemd.stat.exists
+
+    - name: Reload service definitions
+      systemd:
+        daemon_reexec: yes
+      when: systemd_reload.changed
   when: _rs_collector.oom_score_adj is defined and ansible_service_mgr == "systemd"

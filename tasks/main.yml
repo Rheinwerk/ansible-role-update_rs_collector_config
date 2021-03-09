@@ -11,7 +11,7 @@
 
     - name: Creating init (override) file for rs-collector
       file:
-        path: "{{ stat_rs_collector_override.stat.path }}"
+        path: /etc/init/rs-collector.override
         state: touch
         owner: root
         group: root
@@ -20,7 +20,7 @@
 
     - name: Set oom score for rs-collector in Upstart
       lineinfile:
-        dest: "/etc/init/rs-collector.override"
+        dest: /etc/init/rs-collector.override
         state: present
         regexp: '^oom score'
         line: "oom score {{ _rs_collector.oom_score_adj }}"

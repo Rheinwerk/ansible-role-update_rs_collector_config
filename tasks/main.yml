@@ -15,7 +15,7 @@
         state: touch
         owner: root
         group: root
-        mode: 0640
+        mode: 0644
       when: not stat_rs_collector_override.stat.exists
 
     - name: Set oom score for rs-collector in Upstart

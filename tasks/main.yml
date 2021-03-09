@@ -8,15 +8,22 @@
       stat:
         path: /etc/init/rs-collector.override
       register: stat_rs_collector_override
-      when: _rs_collector.oom_score_adj is defined
+
+    - name: Creating init (override) file for rs-collector
+      file:
+        path: "{{ stat_rs_collector_override.stat.path }}"
+        state: touch
+        owner: root
+        group: root
+        mode: 0640
+      when: not stat_rs_collector_override.stat.exists
 
     - name: Set oom score for rs-collector in Upstart
       lineinfile:
-        dest: "{{ stat_rs_collector_override.stat.path }}"
+        dest: "/etc/init/rs-collector.override"
         state: present
         regexp: '^oom score'
         line: "oom score {{ _rs_collector.oom_score_adj }}"
-      when: stat_rs_collector_override.stat.exists
   when: _rs_collector.oom_score_adj is defined and ansible_service_mgr == "upstart"
 
 - block:

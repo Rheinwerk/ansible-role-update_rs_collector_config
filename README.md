@@ -4,7 +4,7 @@ rs_collector config update
 This role can be used to update a rs_collector config, e. g. early in the
 startup process before the actual services runs.
 
-[![Build Status](https://travis-ci.org/Rheinwerk/ansible-role-update_rs_collector_config.svg?branch=master)](https://travis-ci.org/Rheinwerk/ansible-role-update_rs_collector_config)
+[![Build Status](https://github.com/Rheinwerk/ansible-role-update_rs_collector_config/actions/workflows/ci.yml/badge.svg)](https://github.com/Rheinwerk/ansible-role-update_rs_collector_config/actions/workflows/ci.yml)
 
 Notice that it will not start the service and expects the program to be
 installed already.

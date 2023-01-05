@@ -1,16 +1,19 @@
 ---
-allow_duplicates: yes
 galaxy_info:
   author: Daniel Schneller
+  namespace: rheinwerk
+  role_name: update_rs_collector_config
   description: Configures rs_collector
   company: Rheinwerk
   license: license (GPLv3)
-  min_ansible_version: 2.3
+  min_ansible_version: 2.9.0
+  #  we don't want to provide credentials for testing, skip molecule tests
+  min_ansible_container_version: "X"
   platforms:
-  - name: Ubuntu
-    versions:
-    - trusty
+    - name: Ubuntu
+      versions:
+        - trusty
   galaxy_tags:
     - bosun
-    - rs_collector
+    - rscollector
 dependencies: []

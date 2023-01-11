@@ -8,31 +8,8 @@
     owner: root
     group: root
 
-- name: Conigure OOM Score Upstart
-  block:
-    - name: Check if init (override) file for rs-collector exists
-      stat:
-        path: /etc/init/rs-collector.override
-      register: stat_rs_collector_override
-
-    - name: Creating init (override) file for rs-collector
-      file:
-        path: /etc/init/rs-collector.override
-        state: touch
-        owner: root
-        group: root
-        mode: 0644
-      when: not stat_rs_collector_override.stat.exists
-
-    - name: Set oom score for rs-collector in Upstart
-      lineinfile:
-        dest: /etc/init/rs-collector.override
-        state: present
-        regexp: '^oom score'
-        line: "oom score {{ _rs_collector.oom_score_adj }}"
-  when: _rs_collector.oom_score_adj is defined and ansible_service_mgr == "upstart"
-
 - name: Conigure OOM Score SystemD
+  when: _rs_collector.oom_score_adj is defined
   block:
     - name: Check if SystemD Unit file for rs-collector exists
       stat:
@@ -53,4 +30,3 @@
       systemd:
         daemon_reload: yes
       when: systemd_reload.changed
-  when: _rs_collector.oom_score_adj is defined and ansible_service_mgr == "systemd"

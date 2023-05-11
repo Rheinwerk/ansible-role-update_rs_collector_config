@@ -1,7 +1,7 @@
 # vim: ft=ansible:et:ts=2
 
 - name: Update rs_collector configuration
-  template:
+  ansible.builtin.template:
     src: "etc/rs-collector.conf.j2"
     dest: '{{ _rs_collector.config_file | default("/etc/rs-collector.conf") }}'
     mode: 0640
@@ -12,12 +12,12 @@
   when: _rs_collector.oom_score_adj is defined
   block:
     - name: Check if SystemD Unit file for rs-collector exists
-      stat:
+      ansible.builtin.stat:
         path: /etc/systemd/system/rs-collector.service
       register: stat_rs_collector_systemd
 
     - name: Set oom score for rs-collector in systemd
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: "/etc/systemd/system/rs-collector.service"
         state: present
         regexp: '^OOMScoreAdjust='
@@ -27,6 +27,6 @@
       when: stat_rs_collector_systemd.stat.exists
 
     - name: Reload service definitions
-      systemd:
+      ansible.builtin.systemd:
         daemon_reload: yes
       when: systemd_reload.changed

@@ -1,7 +1,6 @@
 ---
 galaxy_info:
-  author: Daniel Schneller
-  namespace: rheinwerk
+  author: rheinwerk
   role_name: update_rs_collector_config
   description: Configures rs_collector
   company: Rheinwerk

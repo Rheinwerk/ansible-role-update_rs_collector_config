@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: "etc/rs-collector.conf.j2"
     dest: '{{ _rs_collector.config_file | default("/etc/rs-collector.conf") }}'
-    mode: 0640
+    mode: "0640"
     owner: root
     group: root
 
@@ -23,10 +23,5 @@
         regexp: '^OOMScoreAdjust='
         line: "OOMScoreAdjust={{ _rs_collector.oom_score_adj }}"
         insertafter: '^\[Service\]'
-      register: systemd_reload
       when: stat_rs_collector_systemd.stat.exists
-
-    - name: Reload service definitions
-      ansible.builtin.systemd:
-        daemon_reload: yes
-      when: systemd_reload.changed
+      notify: Reload systemd daemon

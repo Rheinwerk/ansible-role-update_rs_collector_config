@@ -3,7 +3,7 @@
 # Hostname and port of Bosun; may include basic auth and https config similar to scollector
 Host = "{{ _rs_collector.server.protocol|default("https") }}://{% if _rs_collector.auth is defined %}{{ _rs_collector.auth.user }}:{{ _rs_collector.auth.password }}@{% endif %}{{ _rs_collector.server.ip }}:{{ _rs_collector.server.port }}"
 FullHost = false
-Hostname = "{{ ansible_hostname ~ "." ~ _rs_collector.domain }}"
+Hostname = "{{ ansible_facts["hostname"] ~ "." ~ _rs_collector.domain }}"
 
 # Bosun tags
 [Tags]

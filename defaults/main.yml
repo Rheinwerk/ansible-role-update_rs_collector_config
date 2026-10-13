@@ -10,7 +10,7 @@ _rs_collector:
   auth:
     user: rscollector
     password: secret
-  hostname: "{{ ansible_hostname }}"
+  hostname: "{{ ansible_facts['hostname'] }}"
   domain:
   hostgroup: my-group
   common:
